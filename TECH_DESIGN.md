@@ -379,7 +379,7 @@ Workers Builds 的构建命令为 `npm run build`，部署命令为默认的 `np
 
 ### 13.3 Cloudflare Pages（备选）
 
-构建命令与输出目录同上，`NODE_VERSION=20`。SPA 回退由 `public/_redirects` 提供，构建时原样复制到 `dist/_redirects`。与 Workers 二选一即可，不要同时维护两套线上地址。
+构建命令与输出目录同上，`NODE_VERSION=22`。SPA 回退由 `public/_redirects` 提供，构建时原样复制到 `dist/_redirects`。与 Workers 二选一即可，不要同时维护两套线上地址。
 
 ### 13.4 子路径
 

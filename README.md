@@ -29,7 +29,7 @@
 
 | 项 | 版本 |
 | --- | --- |
-| Node.js | ≥ 18（推荐 20 LTS，本项目在 24 上验证） |
+| Node.js | ≥ 22（推荐 22 LTS，本项目在 24 上验证）；`wrangler` 要求 22+ |
 | npm | ≥ 9 |
 | 浏览器 | Chrome / Edge / Safari 15+ / Firefox 最新版 |
 
@@ -219,7 +219,7 @@ dist/
 1. 推送到 GitHub。
 2. Vercel → **Add New → Project** → 导入仓库。
 3. Framework Preset 选 **Vite**（构建 `npm run build`，输出 `dist`）。
-4. Settings → General → Node.js Version 选 **20.x**。
+4. Settings → General → Node.js Version 选 **22.x**。
 5. **Deploy**。
 6. 验证：打开首页 → 进入任意详情页 → **在该页按 Ctrl+R 强刷** → 应正常显示。
 
@@ -253,7 +253,7 @@ SPA 回退由 `assets.not_found_handling = "single-page-application"` 提供，�
 
 1. Workers & Pages → **Create → Pages → Connect to Git**。
 2. 构建命令 `npm run build`，输出目录 `dist`。
-3. 环境变量加 `NODE_VERSION = 20`。
+3. 环境变量加 `NODE_VERSION = 22`。
 4. **Save and Deploy**，同样验证深层路由刷新。
 
 SPA 回退由 `public/_redirects`（构建后进入 `dist/_redirects`）提供。
