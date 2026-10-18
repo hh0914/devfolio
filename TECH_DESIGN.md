@@ -338,6 +338,7 @@ npm run build
 | `npm run preview` | 预览 `dist/`，用于验证回退与缓存 |
 | `npm run typecheck` | 仅类型检查 |
 | `npm run lint` | ESLint 9 flat config，含 `react-hooks` 规则 |
+| `npm run deploy` | `wrangler deploy`，按 `wrangler.jsonc` 上传 `dist/` |
 | `node scripts/generate-resume.mjs` | 生成示例简历 PDF |
 
 ESLint 配置要点：TS 文件关闭 `no-undef`（由 TS 负责），保留 `react-hooks/rules-of-hooks` 为 error、`exhaustive-deps` 为 warn；`scripts/**/*.mjs` 单独注入 Node globals。
@@ -354,11 +355,33 @@ ESLint 配置要点：TS 文件关闭 `no-undef`（由 TS 负责），保留 `re
 - `rewrites`：除 `/assets/` 外全部回退 `index.html`（同时保留静态文件命中）
 - `headers`：`/assets/*` 设置 `immutable` 长缓存（文件名带 hash，可安全强缓存）
 
-### 13.2 Cloudflare Pages
+### 13.2 Cloudflare Workers（静态资源）
 
-构建命令与输出目录同上，`NODE_VERSION=20`。SPA 回退由 `public/_redirects` 提供，构建时原样复制到 `dist/_redirects`。
+仓库根目录的 `wrangler.jsonc` 以 assets-only 模式部署，不包含 Worker 脚本：
 
-### 13.3 子路径
+```jsonc
+{
+  "name": "devfolio",
+  "compatibility_date": "2026-10-18",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+- `main` 省略：纯静态站不需要 Worker 运行时，也不产生脚本调用计费。
+- `not_found_handling: "single-page-application"`：未命中静态文件时返回 `index.html` 200，承担 SPA 回退。
+- 不接入 Cloudflare Vite 插件：只有需要 Worker 端逻辑或 SSR 时才需要它，而它要求 Vite 6+，对本项目是纯粹的依赖升级。
+- 存在该文件时 `wrangler deploy` 直接按配置部署，不会再走「框架自动配置」；缺失时 wrangler 会检测到 Vite 5 并直接报错。
+
+Workers Builds 的构建命令为 `npm run build`，部署命令为默认的 `npx wrangler deploy`。`wrangler` 已固定在 `devDependencies`，构建时使用锁定版本。
+
+### 13.3 Cloudflare Pages（备选）
+
+构建命令与输出目录同上，`NODE_VERSION=20`。SPA 回退由 `public/_redirects` 提供，构建时原样复制到 `dist/_redirects`。与 Workers 二选一即可，不要同时维护两套线上地址。
+
+### 13.4 子路径
 
 ```bash
 VITE_BASE=/repo/ npm run build

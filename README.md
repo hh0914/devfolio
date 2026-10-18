@@ -4,7 +4,7 @@
 
 - 技术栈：React 18 + TypeScript 5 + Vite 5 + TailwindCSS 3.4
 - 无后端、无数据库、无运行时接口请求
-- 产物 `dist/` 可直接部署到 Vercel 或 Cloudflare Pages
+- 产物 `dist/` 可直接部署到 Vercel、Cloudflare Workers 或 Cloudflare Pages
 - 亮/暗双主题、响应式、键盘可操作
 
 ---
@@ -50,6 +50,7 @@ npm run dev
 | `npm run preview` | 本地预览构建产物 |
 | `npm run typecheck` | 仅做 TypeScript 类型检查 |
 | `npm run lint` | ESLint 检查 |
+| `npm run deploy` | 部署到 Cloudflare Workers（本地需先 `npx wrangler login`） |
 | `node scripts/generate-resume.mjs` | 生成示例简历 PDF |
 
 ---
@@ -224,7 +225,31 @@ dist/
 
 `vercel.json` 已包含 SPA 回退与静态资源长缓存，无需额外设置。
 
-### 7.2 Cloudflare Pages
+### 7.2 Cloudflare Workers（当前使用）
+
+仓库根目录的 `wrangler.jsonc` 把项目声明为「纯静态资源」部署，不包含 Worker 脚本：
+
+```jsonc
+{
+  "name": "devfolio",
+  "compatibility_date": "2026-10-18",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+1. Workers & Pages → **Create → Workers → Connect to Git**，选择本仓库与 `main` 分支。
+2. 构建命令 `npm run build`，部署命令保持默认 `npx wrangler deploy`。
+3. 推送后自动构建，完成后访问 `https://devfolio.<你的子域>.workers.dev`。
+4. 验证：进入任意详情页后按 Ctrl+R 强刷，应正常显示。
+
+SPA 回退由 `assets.not_found_handling = "single-page-application"` 提供，不依赖 `_redirects`。Worker 名必须与 `wrangler.jsonc` 中的 `name` 一致，否则会部署成另一个 Worker。
+
+> 若构建日志出现 `The version of Vite ... cannot be automatically configured`，说明 `wrangler.jsonc` 缺失，`wrangler deploy` 走了框架自动配置并试图接入 Cloudflare Vite 插件。恢复该文件即可，不要为此升级 Vite。
+
+### 7.3 Cloudflare Pages（可选）
 
 1. Workers & Pages → **Create → Pages → Connect to Git**。
 2. 构建命令 `npm run build`，输出目录 `dist`。
@@ -233,7 +258,7 @@ dist/
 
 SPA 回退由 `public/_redirects`（构建后进入 `dist/_redirects`）提供。
 
-### 7.3 部署到子路径（如 GitHub Pages 项目页）
+### 7.4 部署到子路径（如 GitHub Pages 项目页）
 
 ```bash
 VITE_BASE=/your-repo/ npm run build
@@ -247,7 +272,8 @@ VITE_BASE=/your-repo/ npm run build
 
 | 现象 | 原因 | 解决 |
 | --- | --- | --- |
-| 刷新深层路由 404 | 平台未做 SPA 回退 | 确认 `vercel.json` rewrites 或 `_redirects` 已随产物发布 |
+| 刷新深层路由 404 | 平台未做 SPA 回退 | 确认 `vercel.json` rewrites、`wrangler.jsonc` 的 SPA 模式或 `_redirects` 已生效 |
+| Cloudflare 构建报 Vite 版本无法自动配置 | 缺少 `wrangler.jsonc`，`wrangler deploy` 走了框架自动配置 | 恢复根目录的 `wrangler.jsonc`，不要为此升级 Vite |
 | 白屏、资源 404 | 部署在子路径但未设 `base` | 用 `VITE_BASE` 重新构建 |
 | 首帧白屏后变黑 | 主题预置脚本被移除 | 检查 `index.html` 的 `<head>` 内联脚本 |
 | 样式部分失效 | 动态拼接 Tailwind 类名 | 改为静态映射对象 |

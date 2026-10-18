@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers 静态资源部署配置。
+  // 不写 main：本项目是纯静态 SPA，不需要 Worker 脚本。
+  // not_found_handling 负责深层路由回退，等价于 Pages 的 _redirects。
+  "name": "devfolio",
+  "compatibility_date": "2026-10-18",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
