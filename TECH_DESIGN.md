@@ -238,7 +238,8 @@ const modules = import.meta.glob('../content/blog/*.md', {
 
 - 所有页面 `React.lazy`，统一由 `withSuspense` 包裹，回退为与真实布局同尺寸的骨架，避免布局跳动。
 - `basename` 从 `import.meta.env.BASE_URL` 派生：`'/'` 保持根路径，其余去掉末尾斜杠。实现「一份代码部署到子路径」。
-- `vercel.json` 的 rewrites 与 `public/_redirects` 负责 SPA 回退，避免深层路由刷新 404。
+- SPA 回退由平台配置提供：Vercel 用 `vercel.json` 的 rewrites，Cloudflare Workers 用 `wrangler.jsonc` 的 `not_found_handling: "single-page-application"`，Cloudflare Pages 用 `npm run build:pages` 生成的 `dist/_redirects`。
+- `public/` 不放 `_redirects`：Workers 上传时会把 `/*  /index.html  200` 判为无限循环（改写目标同样命中来源规则）并拒绝部署，报 `[code: 100324]`。
 
 实测包体（gzip）：
 
@@ -338,6 +339,7 @@ npm run build
 | `npm run preview` | 预览 `dist/`，用于验证回退与缓存 |
 | `npm run typecheck` | 仅类型检查 |
 | `npm run lint` | ESLint 9 flat config，含 `react-hooks` 规则 |
+| `npm run build:pages` | 同上，构建后写入 `dist/_redirects`（Cloudflare Pages 专用） |
 | `npm run deploy` | `wrangler deploy`，按 `wrangler.jsonc` 上传 `dist/` |
 | `node scripts/generate-resume.mjs` | 生成示例简历 PDF |
 
@@ -377,9 +379,11 @@ ESLint 配置要点：TS 文件关闭 `no-undef`（由 TS 负责），保留 `re
 
 Workers Builds 的构建命令为 `npm run build`，部署命令为默认的 `npx wrangler deploy`。`wrangler` 已固定在 `devDependencies`，构建时使用锁定版本。
 
+> 不要在 `public/` 里放 `_redirects`。Workers 上传前会校验该文件，`/*  /index.html  200` 这类全量改写会被判定为无限循环（改写后的路径同样命中规则来源），部署失败并返回 `Invalid _redirects configuration ... [code: 100324]`。Workers 的回退只由 `not_found_handling` 承担。
+
 ### 13.3 Cloudflare Pages（备选）
 
-构建命令与输出目录同上，`NODE_VERSION=22`。SPA 回退由 `public/_redirects` 提供，构建时原样复制到 `dist/_redirects`。与 Workers 二选一即可，不要同时维护两套线上地址。
+构建命令 `npm run build:pages`，输出目录 `dist`，`NODE_VERSION=22`。Pages 没有 `not_found_handling`，需要 `dist/_redirects`；该文件由 `scripts/write-pages-redirects.mjs` 在构建后写入，仓库不保存，因此不会进入 Workers 的部署产物。与 Workers 二选一即可，不要同时维护两套线上地址。
 
 ### 13.4 子路径
 

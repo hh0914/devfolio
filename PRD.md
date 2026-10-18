@@ -278,7 +278,8 @@ Chrome / Edge / Safari 15+ / Firefox 最新两个版本；视口宽度 320px 起
 | 风险 | 影响 | 对策 |
 | --- | --- | --- |
 | 内容字段写错导致白屏 | 站点不可用 | 构建前校验 + 运行时降级（未知枚举值走默认分支） |
-| 深层路由刷新 404 | 分享链接失效 | `vercel.json` rewrites + `_redirects` |
+| 深层路由刷新 404 | 分享链接失效 | `vercel.json` rewrites；Workers 用 `wrangler.jsonc` 的 `not_found_handling`；Pages 用 `build:pages` 生成 `dist/_redirects` |
+| 平台拒绝部署配置 | 上线阻塞 | 部署配置随平台变化：Workers 不接受 `_redirects` 全量改写，`public/` 不保存该文件，回退交给 `not_found_handling` |
 | 主题首帧闪烁 | 观感差 | `index.html` 内联预置脚本，在 React 挂载前定主题 |
 | 首页包体膨胀 | 首屏慢 | 路由懒加载 + 手动分包 + 高亮模块按需加载 |
 | 部署到子路径白屏 | 全站不可用 | `base` 取 `VITE_BASE`，路由 `basename` 同步派生 |

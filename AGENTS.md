@@ -15,7 +15,7 @@
 | 换个人信息、加项目、加文章、调主题色 | `src/config/`、`src/content/`、`public/`、`index.css` 顶部变量 |
 | 改布局、交互、组件 | `src/components/`、`src/pages/`、`src/hooks/`、`src/lib/` |
 | 改数据结构 | `src/types/` + 所有读取该字段的组件（需全量检索） |
-| 改构建与部署 | `vite.config.ts`、`vercel.json`、`wrangler.jsonc`、`public/_redirects`、`scripts/` |
+| 改构建与部署 | `vite.config.ts`、`vercel.json`、`wrangler.jsonc`、`scripts/` |
 
 ---
 
@@ -220,7 +220,8 @@ npm run preview # 人工验证用
 - 动态拼接 Tailwind 类名
 - 为「以后可能用到」提前抽象组件或状态层
 - 提交 `.env`、`node_modules`、`dist`、个人证件类文件
-- 修改 `public/_redirects`、`wrangler.jsonc` 或 `vercel.json` 的 rewrites 而不做深层路由刷新验证
+- 修改 `scripts/write-pages-redirects.mjs`、`wrangler.jsonc` 或 `vercel.json` 的 rewrites 而不做深层路由刷新验证
+- 把 `_redirects` 放回 `public/`（Workers 会拒绝部署，见第 9 节）
 - 删除或绕过 `scripts/validate-content.mjs` 的校验
 - 用「应该可以」代替实际运行构建
 
@@ -232,7 +233,8 @@ npm run preview # 人工验证用
 | --- | --- |
 | 构建第一步失败 | 终端列出的 Markdown 文件名，按第 5.2 节补齐 frontmatter |
 | 类型报错指向配置 | 是否漏了必填字段；`satisfies` 会精确指出 |
-| 深层路由 404 | `dist/_redirects` 是否存在；`vercel.json` rewrites 是否覆盖该路径；Workers 下检查 `wrangler.jsonc` 的 `not_found_handling` |
+| 深层路由 404 | `vercel.json` rewrites 是否覆盖该路径；Workers 下检查 `wrangler.jsonc` 的 `not_found_handling`；Pages 下 `dist/_redirects` 是否存在（用 `build:pages`） |
+| Cloudflare 报 `Invalid _redirects configuration` / `Infinite loop detected` | `public/_redirects` 是否被误加回来；Workers 不需要该文件，回退交给 `not_found_handling` |
 | Cloudflare 构建报 Vite 版本无法自动配置 | `wrangler.jsonc` 是否缺失；不要升级 Vite 来绕过 |
 | 首帧配色错误 | `dist/index.html` 中 `data-theme-default` 的值；内联脚本是否被改动 |
 | 样式部分失效 | 是否动态拼类名；新 token 是否同时加在 `:root` 与 `.dark` |

@@ -47,6 +47,7 @@ npm run dev
 | --- | --- |
 | `npm run dev` | 本地开发，热更新 |
 | `npm run build` | 校验 Markdown → 类型检查 → 构建，输出 `dist/` |
+| `npm run build:pages` | 同上，并额外写入 `dist/_redirects`（仅 Cloudflare Pages 需要） |
 | `npm run preview` | 本地预览构建产物 |
 | `npm run typecheck` | 仅做 TypeScript 类型检查 |
 | `npm run lint` | ESLint 检查 |
@@ -182,7 +183,7 @@ src/
 ├── router/          路由表（懒加载 + SPA 回退兼容）
 ├── App.tsx
 └── index.css        主题变量、全局样式、文章排版
-public/              原样复制的静态资源（头像、封面、简历、_redirects）
+public/              原样复制的静态资源（头像、封面、简历）
 scripts/             构建前内容校验、简历生成
 ```
 
@@ -191,8 +192,9 @@ scripts/             构建前内容校验、简历生成
 ## 6. 构建与预览
 
 ```bash
-npm run build    # 产出 dist/
-npm run preview  # 本地模拟静态托管
+npm run build        # 产出 dist/
+npm run preview      # 本地模拟静态托管
+npm run build:pages  # 额外生成 dist/_redirects，供 Cloudflare Pages 使用
 ```
 
 `dist/` 内容：
@@ -207,7 +209,7 @@ dist/
 ├── favicon.svg
 ├── og-image.svg
 ├── robots.txt
-└── _redirects     SPA 路由回退
+└── （无 _redirects：Workers 与 Vercel 都不读这个文件）
 ```
 
 ---
@@ -247,16 +249,18 @@ dist/
 
 SPA 回退由 `assets.not_found_handling = "single-page-application"` 提供，不依赖 `_redirects`。Worker 名必须与 `wrangler.jsonc` 中的 `name` 一致，否则会部署成另一个 Worker。
 
+> `public/` 下**不要**放 `_redirects`。Workers 上传时会校验该文件，`/*  /index.html  200` 这类全量改写会被判为无限循环（改写目标同样命中来源规则），部署直接失败并报 `Invalid _redirects configuration ... [code: 100324]`。Workers 的回退交给 `not_found_handling` 即可。
+
 > 若构建日志出现 `The version of Vite ... cannot be automatically configured`，说明 `wrangler.jsonc` 缺失，`wrangler deploy` 走了框架自动配置并试图接入 Cloudflare Vite 插件。恢复该文件即可，不要为此升级 Vite。
 
 ### 7.3 Cloudflare Pages（可选）
 
 1. Workers & Pages → **Create → Pages → Connect to Git**。
-2. 构建命令 `npm run build`，输出目录 `dist`。
+2. 构建命令 `npm run build:pages`，输出目录 `dist`。
 3. 环境变量加 `NODE_VERSION = 22`。
 4. **Save and Deploy**，同样验证深层路由刷新。
 
-SPA 回退由 `public/_redirects`（构建后进入 `dist/_redirects`）提供。
+Pages 没有 `not_found_handling`，靠 `_redirects` 兜底；`build:pages` 在构建后把该文件写进 `dist/`，仓库里不保存它，避免污染 Workers 的部署产物。
 
 ### 7.4 部署到子路径（如 GitHub Pages 项目页）
 
@@ -272,7 +276,8 @@ VITE_BASE=/your-repo/ npm run build
 
 | 现象 | 原因 | 解决 |
 | --- | --- | --- |
-| 刷新深层路由 404 | 平台未做 SPA 回退 | 确认 `vercel.json` rewrites、`wrangler.jsonc` 的 SPA 模式或 `_redirects` 已生效 |
+| 刷新深层路由 404 | 平台未做 SPA 回退 | 确认 `vercel.json` rewrites、`wrangler.jsonc` 的 `not_found_handling`，或 Pages 下的 `dist/_redirects` 已生效 |
+| Cloudflare 报 `Invalid _redirects configuration` / `Infinite loop detected` | `dist/_redirects` 里有 `/*  /index.html  200`，Workers 判定为无限循环 | 删掉 `public/_redirects`，Workers 回退改用 `not_found_handling`；Pages 改用 `npm run build:pages` |
 | Cloudflare 构建报 Vite 版本无法自动配置 | 缺少 `wrangler.jsonc`，`wrangler deploy` 走了框架自动配置 | 恢复根目录的 `wrangler.jsonc`，不要为此升级 Vite |
 | 白屏、资源 404 | 部署在子路径但未设 `base` | 用 `VITE_BASE` 重新构建 |
 | 首帧白屏后变黑 | 主题预置脚本被移除 | 检查 `index.html` 的 `<head>` 内联脚本 |

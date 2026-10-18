@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/validate-content.mjs && tsc --noEmit && vite build",
+    "build:pages": "npm run build && node scripts/write-pages-redirects.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
