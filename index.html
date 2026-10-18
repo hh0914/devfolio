@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN" data-theme-default="%THEME_DEFAULT%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>文 · 前端工程师</title>
+    <meta
+      name="description"
+      content="文的前端作品集：React / TypeScript / 工程化实践，项目作品与技术文章。"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="文 · 前端工程师" />
+    <meta
+      property="og:description"
+      content="文的前端作品集：React / TypeScript / 工程化实践，项目作品与技术文章。"
+    />
+    <meta property="og:image" content="/og-image.svg" />
+    <script>
+      (function () {
+        try {
+          var root = document.documentElement;
+          var preset = root.dataset.themeDefault;
+          var stored = localStorage.getItem('devfolio-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored
+            ? stored === 'dark'
+            : preset === 'dark' || (preset !== 'light' && prefersDark);
+          root.classList.toggle('dark', dark);
+          root.style.colorScheme = dark ? 'dark' : 'light';
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute('content', dark ? '#0b0f14' : '#ffffff');
+        } catch (e) {
+          /* localStorage 不可用时保持默认亮色 */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

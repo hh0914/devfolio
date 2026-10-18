@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="DevFolio project cover">
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#243449" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#c1)" />
+  <g stroke="#94a3b8" stroke-opacity="0.14">
+    <path d="M0 150H1200M0 300H1200M0 450H1200M0 600H1200M200 0V750M400 0V750M600 0V750M800 0V750M1000 0V750" />
+  </g>
+  <rect x="170" y="150" width="860" height="450" rx="16" fill="#f8fafc" />
+  <path d="M170 206h860" stroke="#e2e8f0" stroke-width="2" />
+  <circle cx="206" cy="178" r="7" fill="#f87171" />
+  <circle cx="230" cy="178" r="7" fill="#fbbf24" />
+  <circle cx="254" cy="178" r="7" fill="#34d399" />
+  <rect x="214" y="252" width="120" height="10" rx="5" fill="#2563eb" />
+  <rect x="214" y="292" width="330" height="26" rx="6" fill="#0f172a" />
+  <rect x="214" y="332" width="250" height="26" rx="6" fill="#334155" />
+  <rect x="214" y="386" width="150" height="8" rx="4" fill="#cbd5e1" />
+  <rect x="214" y="404" width="190" height="8" rx="4" fill="#cbd5e1" />
+  <rect x="214" y="456" width="96" height="34" rx="8" fill="#0f172a" />
+  <rect x="322" y="456" width="96" height="34" rx="8" fill="#e2e8f0" />
+  <rect x="600" y="252" width="360" height="238" rx="12" fill="#eef2f7" />
+  <g fill="#94a3b8">
+    <rect x="632" y="286" width="96" height="8" rx="4" />
+    <rect x="632" y="306" width="140" height="8" rx="4" />
+    <rect x="632" y="326" width="72" height="8" rx="4" />
+  </g>
+  <g fill="#2563eb" opacity="0.85">
+    <rect x="632" y="368" width="44" height="90" rx="4" />
+    <rect x="692" y="404" width="44" height="54" rx="4" />
+    <rect x="752" y="340" width="44" height="118" rx="4" />
+    <rect x="812" y="386" width="44" height="72" rx="4" />
+    <rect x="872" y="356" width="44" height="102" rx="4" />
+  </g>
+  <rect x="170" y="620" width="260" height="6" rx="3" fill="#2563eb" />
+</svg>

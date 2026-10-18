@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="md-press project cover">
+  <rect width="1200" height="750" fill="#0b1220" />
+  <rect x="150" y="120" width="900" height="510" rx="14" fill="#0f1729" stroke="#1f2937" />
+  <path d="M150 178h900" stroke="#1f2937" />
+  <circle cx="184" cy="149" r="7" fill="#334155" />
+  <circle cx="208" cy="149" r="7" fill="#334155" />
+  <circle cx="232" cy="149" r="7" fill="#334155" />
+  <g font-family="Consolas, monospace" font-size="22">
+    <text x="196" y="240" fill="#64748b">$</text>
+    <text x="228" y="240" fill="#e2e8f0">npx md-press build ./docs</text>
+    <text x="196" y="292" fill="#34d399">OK parsed 42 markdown files</text>
+    <text x="196" y="336" fill="#34d399">OK generated sidebar and search index</text>
+    <text x="196" y="380" fill="#34d399">OK built 42 pages in 1.2s</text>
+    <text x="196" y="424" fill="#64748b">$</text>
+    <text x="228" y="424" fill="#e2e8f0">npx md-press deploy --to=pages</text>
+    <text x="196" y="476" fill="#60a5fa">-> dist (1.8 MB, 0 runtime deps)</text>
+  </g>
+  <rect x="196" y="540" width="18" height="26" fill="#60a5fa" />
+  <rect x="150" y="676" width="220" height="6" rx="3" fill="#2563eb" />
+</svg>

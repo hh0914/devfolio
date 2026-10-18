@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Opsboard project cover">
+  <rect width="1200" height="750" fill="#111827" />
+  <g stroke="#374151" stroke-opacity="0.6">
+    <path d="M0 610H1200" />
+  </g>
+  <rect x="90" y="90" width="230" height="520" rx="14" fill="#0b1220" stroke="#1f2937" />
+  <rect x="122" y="130" width="90" height="10" rx="5" fill="#60a5fa" />
+  <g fill="#4b5563">
+    <rect x="122" y="180" width="140" height="8" rx="4" />
+    <rect x="122" y="210" width="110" height="8" rx="4" />
+    <rect x="122" y="240" width="150" height="8" rx="4" />
+    <rect x="122" y="270" width="96" height="8" rx="4" />
+  </g>
+  <rect x="360" y="90" width="250" height="150" rx="14" fill="#0b1220" stroke="#1f2937" />
+  <rect x="386" y="120" width="70" height="8" rx="4" fill="#4b5563" />
+  <rect x="386" y="150" width="130" height="24" rx="6" fill="#e5e7eb" />
+  <rect x="386" y="192" width="90" height="8" rx="4" fill="#10b981" />
+  <rect x="630" y="90" width="250" height="150" rx="14" fill="#0b1220" stroke="#1f2937" />
+  <rect x="656" y="120" width="70" height="8" rx="4" fill="#4b5563" />
+  <rect x="656" y="150" width="110" height="24" rx="6" fill="#e5e7eb" />
+  <rect x="656" y="192" width="70" height="8" rx="4" fill="#f59e0b" />
+  <rect x="900" y="90" width="250" height="150" rx="14" fill="#0b1220" stroke="#1f2937" />
+  <rect x="926" y="120" width="70" height="8" rx="4" fill="#4b5563" />
+  <rect x="926" y="150" width="150" height="24" rx="6" fill="#e5e7eb" />
+  <rect x="926" y="192" width="110" height="8" rx="4" fill="#60a5fa" />
+  <rect x="360" y="270" width="790" height="340" rx="14" fill="#0b1220" stroke="#1f2937" />
+  <g stroke="#1f2937">
+    <path d="M400 560H1120M400 500H1120M400 440H1120M400 380H1120M400 320H1120" />
+  </g>
+  <polyline points="410,520 500,470 590,492 680,400 770,424 860,352 950,378 1040,320 1120,344" fill="none" stroke="#60a5fa" stroke-width="3" stroke-linejoin="round" />
+  <g fill="#60a5fa">
+    <circle cx="680" cy="400" r="5" />
+    <circle cx="860" cy="352" r="5" />
+    <circle cx="1040" cy="320" r="5" />
+  </g>
+</svg>

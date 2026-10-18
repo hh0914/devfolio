@@ -1,0 +1,62 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Length 3022 >>
+stream
+0.145 0.388 0.921 rg 56 800 64 4 re f
+BT /F2 24 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 742 Tm (Wen) Tj ET
+BT /F1 10.5 Tf 0.29 0.33 0.39 rg 1 0 0 1 56 706 Tm (Frontend Engineer  /  React  /  TypeScript  /  Build Tooling) Tj ET
+BT /F1 9 Tf 0.29 0.33 0.39 rg 1 0 0 1 56 686.05 Tm (Hangzhou, China  ·  wen@example.com  ·  github.com/wen) Tj ET
+BT /F2 9 Tf 0.145 0.388 0.921 rg 1 0 0 1 56 659.8499999999999 Tm (SUMMARY) Tj ET
+0.85 0.88 0.92 RG 0.6 w 56 654.7499999999999 m 539 654.7499999999999 l S
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 640.7499999999999 Tm (5 years building data-heavy web products. Focus on component architecture,) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 626.4999999999999 Tm (build performance and accessibility. Comfortable owning a feature end to end.) Tj ET
+BT /F2 9 Tf 0.145 0.388 0.921 rg 1 0 0 1 56 602.2499999999999 Tm (EXPERIENCE) Tj ET
+0.85 0.88 0.92 RG 0.6 w 56 597.1499999999999 m 539 597.1499999999999 l S
+BT /F2 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 583.1499999999999 Tm (Senior Frontend Engineer  ·  Xingtu Data  ·  2022.07 - Present) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 568.8999999999999 Tm (-  Abstracted 12 duplicated data tables into a config-driven component; new dashboards ship in 2 hours instead of 2 days.) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 554.1749999999998 Tm (-  Cut first-load JS from 1.2 MB to 380 KB and LCP from 4.1s to 1.7s.) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 539.4499999999998 Tm (-  Built the shared component library and docs site used by 20+ engineers.) Tj ET
+BT /F2 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 518.7249999999998 Tm (Frontend Engineer  ·  Yunfan Tech  ·  2020.03 - 2022.06) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 504.4749999999998 Tm (-  Implemented a JSON Schema driven form engine covering 60+ internal forms.) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 489.7499999999998 Tm (-  Migrated releases from manual FTP to GitHub Actions: 20 min to 3 min.) Tj ET
+BT /F2 9 Tf 0.145 0.388 0.921 rg 1 0 0 1 56 465.02499999999975 Tm (SELECTED PROJECTS) Tj ET
+0.85 0.88 0.92 RG 0.6 w 56 459.9249999999997 m 539 459.9249999999997 l S
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 445.9249999999997 Tm (DevFolio - static portfolio driven entirely by config files and Markdown.) Tj ET
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 431.6749999999997 Tm (md-press - zero-runtime Markdown documentation generator, published on npm.) Tj ET
+BT /F2 9 Tf 0.145 0.388 0.921 rg 1 0 0 1 56 407.4249999999997 Tm (SKILLS) Tj ET
+0.85 0.88 0.92 RG 0.6 w 56 402.3249999999997 m 539 402.3249999999997 l S
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 388.3249999999997 Tm (React, TypeScript, Vite, TailwindCSS, Node.js, PostgreSQL, Playwright, Figma) Tj ET
+BT /F2 9 Tf 0.145 0.388 0.921 rg 1 0 0 1 56 364.0749999999997 Tm (EDUCATION) Tj ET
+0.85 0.88 0.92 RG 0.6 w 56 358.9749999999997 m 539 358.9749999999997 l S
+BT /F1 9.5 Tf 0.1 0.1 0.12 rg 1 0 0 1 56 344.9749999999997 Tm (B.Eng. in Computer Science  ·  Zhejiang University of Technology  ·  2016 - 2020) Tj ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000000321 00000 n 
+0000000396 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3470
+%%EOF

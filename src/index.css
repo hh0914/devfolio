@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 255 255 255;
+    --bg-subtle: 246 247 249;
+    --surface: 255 255 255;
+    --text: 17 24 39;
+    --text-muted: 75 85 99;
+    --border: 226 232 240;
+    --accent: 37 99 235;
+
+    --code-keyword: #cf222e;
+    --code-string: #0a3069;
+    --code-function: #8250df;
+    --code-number: #0550ae;
+    --code-comment: #6e7781;
+    --code-attr: #116329;
+  }
+
+  .dark {
+    --bg: 11 15 20;
+    --bg-subtle: 17 24 32;
+    --surface: 22 29 38;
+    --text: 230 234 240;
+    --text-muted: 154 164 178;
+    --border: 36 48 64;
+    --accent: 96 165 250;
+
+    --code-keyword: #ff7b72;
+    --code-string: #a5d6ff;
+    --code-function: #d2a8ff;
+    --code-number: #79c0ff;
+    --code-comment: #8b949e;
+    --code-attr: #7ee787;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-page font-sans text-ink antialiased;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .md-body {
+    @apply text-[15px] leading-7;
+  }
+
+  .md-body > * + * {
+    @apply mt-5;
+  }
+
+  .md-body h2 {
+    @apply mt-11 scroll-mt-28 text-xl font-semibold tracking-tight text-ink;
+  }
+
+  .md-body h3 {
+    @apply mt-8 scroll-mt-28 text-base font-semibold text-ink;
+  }
+
+  .md-body p {
+    @apply text-[15px] leading-7 text-muted;
+  }
+
+  .md-body strong {
+    @apply font-semibold text-ink;
+  }
+
+  .md-body a {
+    @apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
+  }
+
+  .md-body ul {
+    @apply list-disc space-y-2 pl-5 text-muted;
+  }
+
+  .md-body ol {
+    @apply list-decimal space-y-2 pl-5 text-muted;
+  }
+
+  .md-body li > p {
+    @apply mt-0;
+  }
+
+  .md-body blockquote {
+    @apply border-l-2 border-accent/50 pl-4 text-muted;
+  }
+
+  .md-body hr {
+    @apply my-10 border-line;
+  }
+
+  .md-body table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .md-body thead th {
+    @apply border-b border-line py-2 pr-4 text-left font-medium text-ink;
+  }
+
+  .md-body tbody td {
+    @apply border-b border-line/70 py-2 pr-4 align-top text-muted;
+  }
+
+  .md-body img {
+    @apply rounded-lg border border-line;
+  }
+
+  .md-body :not(pre) > code {
+    @apply rounded border border-line bg-subtle px-1.5 py-0.5 font-mono text-[0.85em] text-ink;
+  }
+
+  .md-body pre code {
+    @apply border-0 bg-transparent p-0;
+  }
+}
+
+/* highlight.js token 配色，跟随 CSS 变量切换主题 */
+.hljs-comment,
+.hljs-quote {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag {
+  color: var(--code-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition {
+  color: var(--code-string);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-section {
+  color: var(--code-function);
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet {
+  color: var(--code-number);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: var(--code-attr);
+}
+
+.hljs-type,
+.hljs-built_in,
+.hljs-class .hljs-title {
+  color: var(--code-number);
+}
+
+.hljs-meta,
+.hljs-link {
+  color: var(--code-comment);
+}
+
+.hljs-deletion {
+  color: var(--code-keyword);
+}
