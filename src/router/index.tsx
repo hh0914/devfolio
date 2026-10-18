@@ -7,6 +7,7 @@ const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
 const BlogListPage = lazy(() => import('@/pages/BlogListPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
+const AdminPage = lazy(() => import('@/pages/AdminPage'));
 const NotFoundPage = lazy(() =>
   import('@/pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })),
 );
@@ -38,6 +39,7 @@ export const router = createBrowserRouter(
         { path: 'projects/:slug', element: withSuspense(<ProjectDetailPage />) },
         { path: 'blog', element: withSuspense(<BlogListPage />) },
         { path: 'blog/:slug', element: withSuspense(<BlogPostPage />) },
+        { path: 'admin', element: withSuspense(<AdminPage />) },
         { path: '*', element: withSuspense(<NotFoundPage />) },
       ],
     },

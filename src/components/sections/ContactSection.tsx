@@ -1,16 +1,8 @@
-import type { LucideIcon } from 'lucide-react';
-import { ArrowUpRight, BookOpen, Github, Globe, Mail, Twitter } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { EmailButton } from '@/components/ui/EmailButton';
+import { FALLBACK_SOCIAL_ICON, SOCIAL_ICONS } from '@/lib/social-icons';
 import { profile } from '@/config';
-
-const ICONS: Record<string, LucideIcon> = {
-  Github,
-  BookOpen,
-  Mail,
-  Twitter,
-  Globe,
-};
 
 export function ContactSection() {
   return (
@@ -32,7 +24,7 @@ export function ContactSection() {
 
             <ul className="flex flex-wrap items-center gap-x-6 gap-y-3">
               {profile.socials.map((social) => {
-                const Icon = ICONS[social.icon] ?? Globe;
+                const Icon = SOCIAL_ICONS[social.icon] ?? FALLBACK_SOCIAL_ICON;
                 const external = social.url.startsWith('http');
                 return (
                   <li key={social.id}>

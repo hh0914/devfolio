@@ -16,3 +16,10 @@ export type { TimelineItem } from './experience';
 export type { NavItem, SiteConfig } from './site';
 
 export type { ContentSource, ContentSourceConfig } from './content-source';
+
+export type {
+  ContentOverride,
+  ContentOverrideParseResult,
+  ProfileOverride,
+  SiteOverride,
+} from './content-override';

@@ -40,6 +40,7 @@
 
 ```
 main.tsx
+  ├─ applyContentOverride()          读 localStorage，把 /admin 的快照写回 config 单例
   └─ RouterProvider (basename 来自 BASE_URL)
        └─ App.tsx
             ├─ SkipToContent
@@ -50,13 +51,14 @@ main.tsx
             │    ├─ ProjectDetailPage → MarkdownRenderer
             │    ├─ BlogListPage → PostCard[]
             │    ├─ BlogPostPage → MarkdownRenderer
+            │    ├─ AdminPage（编辑 profile / site，写 localStorage）
             │    └─ NotFoundPage
             ├─ Footer
             ├─ ScrollManager（滚动复位 / 锚点）
             └─ ScrollToTopButton
 ```
 
-数据自下而上单向流动：`config → 页面 → 区块 → 展示组件`。没有全局 store，没有数据请求，也没有异步状态。
+数据自下而上单向流动：`config → 页面 → 区块 → 展示组件`。没有全局 store，没有数据请求，也没有异步状态。唯一的外部持久化是 `/admin` 写入的 `localStorage` 快照，在挂载前一次性合并进配置。
 
 ---
 
@@ -73,11 +75,13 @@ src/
 │   ├── blog.ts             博客列表页文案与每页数量
 │   └── index.ts            统一出口
 ├── content/blog/*.md       ★ 文章（另一个日常编辑目录）
-├── types/                  Profile / Project / Skill / BlogPost / SiteConfig 等
+├── types/                  Profile / Project / Skill / BlogPost / SiteConfig / ContentOverride 等
 ├── lib/
 │   ├── markdown.ts         glob 装载 + frontmatter 解析 + 排序 + 阅读时长
 │   ├── rehype-highlight-subset.ts  自写高亮插件（6 种语言）
 │   ├── theme.ts            主题读写与 DOM 应用
+│   ├── content-override.ts 本地覆盖：校验、读写 localStorage、启动时写回配置
+│   ├── social-icons.ts     社交图标白名单（联系模块与 /admin 共用）
 │   ├── format.ts           日期、数字、阅读时长格式化
 │   ├── constants.ts        存储键、分页等常量
 │   └── cn.ts               clsx + tailwind-merge
@@ -85,9 +89,9 @@ src/
 ├── components/
 │   ├── layout/             Header、DesktopNav、MobileMenu、Footer、ScrollManager、ScrollToTopButton、SkipToContent、ThemeToggle
 │   ├── sections/           Hero、Projects、Skills、About、BlogPreview、Contact、ProjectCard
-│   ├── ui/                 Button、Container、Tag、SectionHeading、Timeline、SkillLevelDots、EmailButton
+│   ├── ui/                 Button、Container、Tag、SectionHeading、Timeline、SkillLevelDots、EmailButton、FormField
 │   └── blog/               MarkdownRenderer、PostCard
-├── pages/                  6 个路由页面
+├── pages/                  7 个路由页面（含 AdminPage）
 ├── router/index.tsx        路由表 + 懒加载 + Suspense 骨架
 ├── App.tsx                 布局壳
 ├── main.tsx                挂载入口
@@ -178,6 +182,31 @@ interface SiteConfig {
 
 配置对象一律以 `satisfies X` 声明而不是 `: X`，既获得字段校验，又保留字面量类型用于推导。
 
+### 5.1 运行时覆盖层（`/admin`）
+
+后台不引入任何服务端：`/admin` 把表单写成一份完整快照存进 `localStorage`（键 `devfolio-content-v1`），`main.tsx` 在 `createRoot` 之前调用 `applyContentOverride()`，把快照 `Object.assign` 回配置单例。
+
+```ts
+interface ContentOverride {
+  version: 1;
+  updatedAt: string;
+  profile: ProfileOverride;   // Profile 的可编辑字段，全部必填
+  site: SiteOverride;         // title / description / author / footer
+}
+```
+
+设计取舍：
+
+| 决策 | 原因 |
+| --- | --- |
+| 存完整快照而不是增量 | 读取侧无需判断「字段是否存在」，导出/导入即整份替换，避免半新半旧 |
+| 启动时写回单例而不是改造组件 | 所有区块继续读 `@/config`，新增/删除展示组件都不会漏读覆盖值 |
+| 保存后整页刷新 | 单例是模块级对象，刷新是唯一不需要引入状态库或 Context 的可靠生效方式 |
+| 外部数据逐字段收窄 | `localStorage` 与导入的 JSON 都可能被手工改坏，校验失败时直接忽略而不是渲染坏数据 |
+| 仅本机生效 | 没有数据库与后端，覆盖不可能同步给访客；线上内容仍以 `src/config/` 为准 |
+
+可编辑字段限制：Slogan ≤ 60 字、简介 ≤ 12 段、技能标签 ≤ 8 个、社交链接 ≤ 8 条、站点描述 ≤ 160 字、邮箱需符合格式、社交链接需以 `http(s)://`、`mailto:` 或 `/` 开头。校验规则同时存在于表单（逐字段提示）与 `parseContentOverride`（权威校验）。
+
 ---
 
 ## 6. 内容管线
@@ -234,6 +263,7 @@ const modules = import.meta.glob('../content/blog/*.md', {
 | `/projects/:slug` | ProjectDetailPage | 进入时懒加载 |
 | `/blog` | BlogListPage | 进入时懒加载 |
 | `/blog/:slug` | BlogPostPage | 进入时懒加载（含 Markdown 渲染） |
+| `/admin` | AdminPage | 进入时懒加载（表单与校验逻辑不进入首屏包） |
 | `*` | NotFoundPage | 进入时懒加载 |
 
 - 所有页面 `React.lazy`，统一由 `withSuspense` 包裹，回退为与真实布局同尺寸的骨架，避免布局跳动。
@@ -300,11 +330,13 @@ tailwind.config.js  colors: rgb(var(--x) / <alpha-value>)
 | --- | --- | --- |
 | `pages` | 组织数据与区块、设置页面元信息 | 不写可复用样式逻辑 |
 | `sections` | 首页区块与卡片 | 只读 config，不发请求 |
-| `ui` | 无业务语义的原语（Button、Tag、Container） | 不 import `@/config` |
+| `ui` | 无业务语义的原语（Button、Tag、Container、FormField） | 不 import `@/config` |
 | `layout` | 导航、页脚、滚动、跳转 | 可读 `site`/`profile` 的导航信息 |
 | `blog` | Markdown 渲染与文章卡片 | 渲染器不感知具体文章 |
 
 `ui` 层不使用业务数据，保证可以直接复制到其他项目复用。
+
+`AdminPage` 是唯一读写 `localStorage` 的页面，校验与持久化逻辑放在 `src/lib/content-override.ts`，页面只负责表单状态与交互。
 
 ---
 
@@ -404,6 +436,8 @@ VITE_BASE=/repo/ npm run build
 | `og:image` 为 SVG | 部分社交平台不渲染 SVG 卡片 | 替换为 1200×630 PNG |
 | 无 sitemap | 依赖搜索引擎自行发现 | 需要时在构建后生成 |
 | 主题仅两种 | 首访可跟随系统，之后只能亮/暗 | 依赖系统偏好的用户需手动切换一次 |
+| `/admin` 修改仅本机可见 | 没有后端与数据库，覆盖数据存在浏览器 `localStorage`，无法同步给访客；无登录，任何人只能改自己的浏览器 | 线上内容以 `src/config/` 为准；改完把值写回配置提交，或用导出的 JSON 迁移 |
+| `/admin` 覆盖会遮蔽配置文件 | 保存后即使修改 `src/config/profile.ts`，本机仍显示覆盖值 | 页面顶部显示最后更新时间；「恢复默认」清除覆盖 |
 
 ---
 

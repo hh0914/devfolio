@@ -17,6 +17,8 @@
 | 改数据结构 | `src/types/` + 所有读取该字段的组件（需全量检索） |
 | 改构建与部署 | `vite.config.ts`、`vercel.json`、`wrangler.jsonc`、`scripts/` |
 
+`/admin` 的编辑能力不改变上面这条边界：它写的是浏览器 `localStorage`（`src/lib/content-override.ts`），不产生仓库文件改动，也不上传数据。
+
 ---
 
 ## 2. 角色分工
@@ -175,6 +177,7 @@ npm run preview # 人工验证用
 人工验证：
 
 - [ ] 五个路由可直接访问，**在每个页面按 Ctrl+R 强刷**不 404
+- [ ] `/admin` 修改姓名后保存，刷新首页可见；「恢复默认」后回到配置值；导出的 JSON 能重新导入
 - [ ] 暗色与亮色下正文、次要文字、边框均清晰
 - [ ] 320px、768px、1280px 三个宽度无横向滚动、无遮挡
 - [ ] 仅用键盘完成：跳至主内容 → 导航 → 项目详情 → 复制代码 → 返回
@@ -222,6 +225,8 @@ npm run preview # 人工验证用
 - 提交 `.env`、`node_modules`、`dist`、个人证件类文件
 - 修改 `scripts/write-pages-redirects.mjs`、`wrangler.jsonc` 或 `vercel.json` 的 rewrites 而不做深层路由刷新验证
 - 把 `_redirects` 放回 `public/`（Workers 会拒绝部署，见第 9 节）
+- 让 `/admin` 或任何组件发起运行时网络请求、写入服务端或提交数据库
+- 在 `/admin` 之外的组件里直接读写 `localStorage`（持久化统一走 `src/lib/content-override.ts`）
 - 删除或绕过 `scripts/validate-content.mjs` 的校验
 - 用「应该可以」代替实际运行构建
 
@@ -237,6 +242,8 @@ npm run preview # 人工验证用
 | Cloudflare 报 `Invalid _redirects configuration` / `Infinite loop detected` | `public/_redirects` 是否被误加回来；Workers 不需要该文件，回退交给 `not_found_handling` |
 | Cloudflare 构建报 Vite 版本无法自动配置 | `wrangler.jsonc` 是否缺失；不要升级 Vite 来绕过 |
 | 首帧配色错误 | `dist/index.html` 中 `data-theme-default` 的值；内联脚本是否被改动 |
+| `/admin` 保存后页面没变化 | 是否真的点到了「保存并在本机生效」；`localStorage` 中 `devfolio-content-v1` 是否存在；浏览器是否禁用了站点数据 |
+| `/admin` 修改了但配置文件改了不生效 | 本地覆盖遮蔽了配置，先「恢复默认」或调整 `/admin` 里的值 |
 | 样式部分失效 | 是否动态拼类名；新 token 是否同时加在 `:root` 与 `.dark` |
 | 代码块无高亮 | 语言是否在 6 种之内；`rehype-highlight-subset.ts` 是否注册 |
 | 移动端横向滚动 | 固定宽度元素、长代码块、超长无空格文本 |

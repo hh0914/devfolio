@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
+import { applyContentOverride } from '@/lib/content-override';
 import { router } from '@/router';
 import '@/index.css';
+
+applyContentOverride();
 
 const container = document.getElementById('root');
 

@@ -11,6 +11,7 @@
     --text-muted: 75 85 99;
     --border: 226 232 240;
     --accent: 37 99 235;
+    --danger: 185 28 28;
 
     --code-keyword: #cf222e;
     --code-string: #0a3069;
@@ -28,6 +29,7 @@
     --text-muted: 154 164 178;
     --border: 36 48 64;
     --accent: 96 165 250;
+    --danger: 248 113 113;
 
     --code-keyword: #ff7b72;
     --code-string: #a5d6ff;
